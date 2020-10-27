@@ -1,7 +1,7 @@
 <template>
   <tr style="border-top: solid 1px lightgray;">
     <td style="border-top: solid 1px lightgray;">
-      <input type="checkbox" v-model="item.done"/>
+      <input type="checkbox" v-model="item.done" @change="toggle"/>
     </td>
     <td style="border-top: solid 1px lightgray;" v-on:dblclick="item.editable = true" @dblclick="item.editing = true">
       <input v-model="item.title" v-if="item.editing" v-on:focusout="item.editing = false"/>
@@ -22,7 +22,16 @@ export default {
   props: ['item'],
   methods: {
     removeItem(id) {
-      this.$store.removeItem(id)
+      fetch("http://localhost:8080/api/todos/" + id, {
+        method: 'delete'
+      }).then(
+          () => this.$store.removeItem(id)
+      )
+    },
+    toggle() {
+      fetch(`http://localhost:8080/api/todos/${this.item.id}/toggle`, {
+        method: 'put'
+      })
     }
   }
 }

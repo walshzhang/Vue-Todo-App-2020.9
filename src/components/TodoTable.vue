@@ -29,6 +29,11 @@ export default {
     items() {
       return this.$store.items()
     }
+  },
+  created() {
+    fetch('http://localhost:8080/api/todos')
+        .then(response => response.json())
+        .then(json => this.$store.initItems(json))
   }
 }
 </script>

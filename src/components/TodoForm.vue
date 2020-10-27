@@ -13,11 +13,21 @@ export default {
     }
   },
   methods: {
-    newItem() {
-      return {id: this.id++, title: this.item, editing: false, done: false}
-    },
     addItem() {
-      store.addItem(this.newItem())
+      // 异步请求
+      fetch("http://localhost:8080/api/todos",
+          {
+            body: JSON.stringify({title: this.item}),
+            method: "post",
+            headers: {
+              "Content-Type": "application/json"
+            }
+          }
+      ).then(response => {
+        return response.json()
+      }).then(todo => {
+        store.addItem(todo)
+      })
     }
   }
 }
